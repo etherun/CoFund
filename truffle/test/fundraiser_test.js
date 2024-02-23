@@ -111,7 +111,6 @@ contract("Fundraiser", (accounts) => {
       const tx = await fundraiser.donate({ from: donor, value });
       const expectedEvent = "DonationReceived";
       const actualEvent = tx.logs[0].event;
-      console.log("Log:", tx.logs[0]);
       assert.equal(actualEvent, expectedEvent, "events should match");
     });
   });
