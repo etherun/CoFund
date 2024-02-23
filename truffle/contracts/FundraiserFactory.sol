@@ -4,6 +4,7 @@ import "./Fundraiser.sol";
 
 contract FundraiserFactory {
     Fundraiser[] private _fundraisers;
+    uint256 constant maxLimit = 20;
 
     function fundraisersCount() public view returns (uint256) {
         return _fundraisers.length;
@@ -25,5 +26,22 @@ contract FundraiserFactory {
             msg.sender
         );
         _fundraisers.push(fundraiser);
+    }
+
+    function fundraisers(
+        uint256 limit,
+        uint256 offset
+    ) public view returns (Fundraiser[] memory collections) {
+        require(offset <= fundraisersCount(), "offset out of range");
+        uint256 size = fundraisersCount() - offset;
+        size = size < limit ? size : limit;
+        size = size < maxLimit ? size : maxLimit;
+
+        collections = new Fundraiser[](size);
+        for (uint256 i = 0; i < size; i++) {
+            collections[i] = _fundraisers[offset + i];
+        }
+
+        return collections;
     }
 }
